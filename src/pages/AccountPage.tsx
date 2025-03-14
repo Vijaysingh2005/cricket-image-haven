@@ -8,7 +8,8 @@ import {
   Package, 
   ImageIcon, 
   Settings, 
-  LogOut 
+  LogOut,
+  Home
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import UserProfile from '@/components/account/UserProfile';
@@ -33,10 +34,12 @@ const AccountPage = () => {
     localStorage.removeItem('authToken');
     setIsAuthenticated(false);
     
-    // Show toast notification
-    // toast.success('Successfully logged out');
-    
     // Navigate to home page
+    navigate('/');
+  };
+
+  // Go to home page
+  const goToHome = () => {
     navigate('/');
   };
 
@@ -65,14 +68,24 @@ const AccountPage = () => {
       <div className="flex flex-col space-y-8">
         <div className="flex justify-between items-center">
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white">My Account</h1>
-          <Button 
-            variant="outline" 
-            className="flex items-center gap-2"
-            onClick={handleLogout}
-          >
-            <LogOut size={16} />
-            <span>Logout</span>
-          </Button>
+          <div className="flex space-x-2">
+            <Button 
+              variant="secondary" 
+              className="flex items-center gap-2"
+              onClick={goToHome}
+            >
+              <Home size={16} />
+              <span>Go Home</span>
+            </Button>
+            <Button 
+              variant="outline" 
+              className="flex items-center gap-2"
+              onClick={handleLogout}
+            >
+              <LogOut size={16} />
+              <span>Logout</span>
+            </Button>
+          </div>
         </div>
 
         <Tabs defaultValue="profile" className="w-full">

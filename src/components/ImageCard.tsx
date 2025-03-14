@@ -1,9 +1,10 @@
 
 import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
-import { Lock, EyeOff, Download } from 'lucide-react';
+import { Lock, EyeOff, Download, Eye } from 'lucide-react';
 import { motion } from 'framer-motion';
 import ImageViewer from './ImageViewer';
+import { toast } from "sonner";
 
 interface ImageCardProps {
   image: {
@@ -28,17 +29,11 @@ const ImageCard = ({ image }: ImageCardProps) => {
 
   const handleDownload = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (!image.isPremium) {
-      // Create a temporary anchor element to download the image
-      const link = document.createElement('a');
-      link.href = image.imageUrl;
-      link.download = `${image.title.replace(/\s+/g, '-').toLowerCase()}.jpg`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      
-      console.log(`Downloading: ${image.title}`);
-    }
+    
+    // Block downloads for all images and show a notification
+    toast.error("Downloads are disabled for security reasons", {
+      description: "Please subscribe to a package to use our premium content."
+    });
   };
 
   const handlePreview = (e: React.MouseEvent) => {
@@ -85,10 +80,19 @@ const ImageCard = ({ image }: ImageCardProps) => {
             className={cn(
               "w-full h-full object-cover transition-transform duration-500 ease-out",
               isHovered && !image.isPremium ? "scale-110" : "",
-              image.isPremium ? "blur-sm" : ""
+              image.isPremium ? "blur-sm" : "",
+              "pointer-events-none" // Disable right-click saving
             )}
             onLoad={() => setIsLoading(false)}
+            onContextMenu={(e) => e.preventDefault()} // Prevent context menu
+            draggable="false" // Disable dragging
           />
+
+          {/* Secure content overlay */}
+          <div className="absolute top-2 left-2 bg-black/60 text-white text-xs py-1 px-2 rounded-full flex items-center">
+            <EyeOff size={12} className="mr-1" />
+            <span>Protected</span>
+          </div>
 
           {/* Premium badge */}
           {image.isPremium && (
@@ -116,12 +120,12 @@ const ImageCard = ({ image }: ImageCardProps) => {
                   ? "bg-cricket-red/10 text-cricket-red hover:bg-cricket-red/20" 
                   : "bg-green-50 text-green-600 hover:bg-green-100 dark:bg-green-900/30 dark:text-green-400 dark:hover:bg-green-900/50"
               )}
-              onClick={image.isPremium ? handlePreview : handleDownload}
+              onClick={image.isPremium ? handlePreview : handlePreview}
             >
               {image.isPremium ? (
-                <>Preview</>
+                <>Preview<Eye size={14} className="ml-1" /></>
               ) : (
-                <>Download <Download size={14} /></>
+                <>View<Eye size={14} /></>
               )}
             </button>
           </div>

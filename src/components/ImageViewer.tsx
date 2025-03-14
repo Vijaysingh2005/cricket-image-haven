@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X } from 'lucide-react';
+import { X, EyeOff } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface ImageViewerProps {
@@ -56,6 +56,9 @@ const ImageViewer = ({ imageUrl, title, isOpen, onClose }: ImageViewerProps) => 
               src={imageUrl} 
               alt={title} 
               className="w-full h-full object-contain"
+              onContextMenu={(e) => e.preventDefault()}
+              draggable="false"
+              style={{ pointerEvents: "none" }}
             />
             
             <motion.button
@@ -69,6 +72,11 @@ const ImageViewer = ({ imageUrl, title, isOpen, onClose }: ImageViewerProps) => 
             >
               <X size={24} />
             </motion.button>
+
+            <div className="absolute top-4 left-4 bg-black/60 px-3 py-1.5 rounded-full flex items-center">
+              <EyeOff size={16} className="mr-2" />
+              <span className="text-white text-sm">Protected Content</span>
+            </div>
             
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
