@@ -1,10 +1,12 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { toast } from 'sonner';
 import ImageCard from '@/components/ImageCard';
 import Footer from '@/components/Footer';
 import Navigation from '@/components/Navigation';
-import { Search, Filter, ArrowUpDown, CheckCircle } from 'lucide-react';
+import Header from '@/components/Header';
+import { Search, Filter, ArrowUpDown, CheckCircle, X } from 'lucide-react';
 
 // Sample images data
 const sampleImages = [
@@ -85,6 +87,7 @@ const categories = [
 
 const ExplorePage = () => {
   const [images, setImages] = useState([]);
+  const [filteredImages, setFilteredImages] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState("All Images");
   const [showFilters, setShowFilters] = useState(false);
@@ -95,12 +98,15 @@ const ExplorePage = () => {
     onlyFree: false,
     onlyPremium: false,
     priceRange: [0, 10],
+    sortBy: "Most Recent",
+    resolution: "All Resolutions"
   });
 
   useEffect(() => {
     // Simulate loading
     const timer = setTimeout(() => {
       setImages(sampleImages);
+      setFilteredImages(sampleImages);
       setIsLoading(false);
     }, 1000);
     
@@ -111,7 +117,36 @@ const ExplorePage = () => {
   const handleSearch = (e) => {
     e.preventDefault();
     console.log("Searching for:", searchTerm);
-    // In a real app, you would filter images based on the search term
+    
+    if (searchTerm.trim() === '') {
+      setFilteredImages(images);
+      return;
+    }
+    
+    const results = images.filter(image => 
+      image.title.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    
+    setFilteredImages(results);
+    
+    if (results.length === 0) {
+      toast.info("No images found matching your search.");
+    } else {
+      toast.success(`Found ${results.length} matching images.`);
+    }
+  };
+
+  // Handle category selection
+  const handleCategoryChange = (category) => {
+    setActiveCategory(category);
+    
+    if (category === "All Images") {
+      setFilteredImages(images);
+    } else {
+      // In a real app, this would filter based on category data
+      // For this demo, we'll just show a toast
+      toast.info(`Category selected: ${category}`);
+    }
   };
 
   // Handle filter change
@@ -122,10 +157,53 @@ const ExplorePage = () => {
     });
   };
 
+  // Apply filters
+  const applyFilters = () => {
+    let results = [...images];
+    
+    // Filter by free/premium
+    if (filters.onlyFree) {
+      results = results.filter(img => !img.isPremium);
+    }
+    
+    if (filters.onlyPremium) {
+      results = results.filter(img => img.isPremium);
+    }
+    
+    // Sort results
+    if (filters.sortBy === "Price: Low to High") {
+      results.sort((a, b) => a.price - b.price);
+    } else if (filters.sortBy === "Price: High to Low") {
+      results.sort((a, b) => b.price - a.price);
+    }
+    
+    setFilteredImages(results);
+    toast.success("Filters applied successfully!");
+    setShowFilters(false);
+  };
+
+  // Reset filters
+  const resetFilters = () => {
+    setFilters({
+      onlyFree: false,
+      onlyPremium: false,
+      priceRange: [0, 10],
+      sortBy: "Most Recent",
+      resolution: "All Resolutions"
+    });
+    
+    setFilteredImages(images);
+    setSearchTerm("");
+    setActiveCategory("All Images");
+    toast.info("Filters have been reset.");
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      {/* Header with search */}
-      <header className="bg-white dark:bg-gray-800 shadow-sm">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-16">
+      <Header />
+      
+      {/* Content header with search */}
+      <div className="bg-white dark:bg-gray-800 shadow-sm">
         <div className="container mx-auto px-4 py-6">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Explore Cricket Images</h1>
@@ -164,7 +242,7 @@ const ExplorePage = () => {
               {categories.map((category) => (
                 <button
                   key={category}
-                  onClick={() => setActiveCategory(category)}
+                  onClick={() => handleCategoryChange(category)}
                   className={`whitespace-nowrap px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                     activeCategory === category
                       ? 'bg-cricket-red text-white'
@@ -205,7 +283,7 @@ const ExplorePage = () => {
                       onClick={() => handleFilterChange('onlyPremium', !filters.onlyPremium)}
                       className={`flex items-center px-3 py-1.5 rounded-lg text-sm ${
                         filters.onlyPremium 
-                          ? 'bg-cricket-yellow/20 text-cricket-yellow' 
+                          ? 'bg-cricket-yellow/20 text-gray-800' 
                           : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300'
                       }`}
                     >
@@ -218,6 +296,8 @@ const ExplorePage = () => {
                 <div>
                   <p className="text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Sort By</p>
                   <select 
+                    value={filters.sortBy}
+                    onChange={(e) => handleFilterChange('sortBy', e.target.value)}
                     className="w-full px-3 py-1.5 rounded-lg bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600"
                   >
                     <option>Most Recent</option>
@@ -230,6 +310,8 @@ const ExplorePage = () => {
                 <div>
                   <p className="text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Resolution</p>
                   <select 
+                    value={filters.resolution}
+                    onChange={(e) => handleFilterChange('resolution', e.target.value)}
                     className="w-full px-3 py-1.5 rounded-lg bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600"
                   >
                     <option>All Resolutions</option>
@@ -241,13 +323,23 @@ const ExplorePage = () => {
               </div>
               
               <div className="mt-4 flex justify-between">
-                <button className="text-sm text-cricket-red">Reset Filters</button>
-                <button className="bg-cricket-red text-white px-4 py-1.5 rounded-lg text-sm">Apply Filters</button>
+                <button 
+                  onClick={resetFilters}
+                  className="text-sm text-cricket-red"
+                >
+                  Reset Filters
+                </button>
+                <button 
+                  onClick={applyFilters}
+                  className="bg-cricket-red text-white px-4 py-1.5 rounded-lg text-sm"
+                >
+                  Apply Filters
+                </button>
               </div>
             </motion.div>
           )}
         </div>
-      </header>
+      </div>
       
       {/* Images grid */}
       <main className="container mx-auto px-4 py-8">
@@ -264,10 +356,13 @@ const ExplorePage = () => {
           <>
             <div className="flex justify-between items-center mb-6">
               <p className="text-gray-600 dark:text-gray-400">
-                Showing <span className="font-medium">{images.length}</span> images
+                Showing <span className="font-medium">{filteredImages.length}</span> images
               </p>
               <div className="flex items-center">
-                <button className="flex items-center gap-1 text-sm text-gray-700 dark:text-gray-300">
+                <button 
+                  onClick={() => setShowFilters(!showFilters)}
+                  className="flex items-center gap-1 text-sm text-gray-700 dark:text-gray-300"
+                >
                   <ArrowUpDown size={14} />
                   Sort
                 </button>
@@ -288,24 +383,38 @@ const ExplorePage = () => {
               }}
               className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
             >
-              {images.map((image) => (
-                <motion.div
-                  key={image.id}
-                  variants={{
-                    hidden: { y: 20, opacity: 0 },
-                    show: { y: 0, opacity: 1 }
-                  }}
-                >
-                  <ImageCard image={image} />
-                </motion.div>
-              ))}
+              {filteredImages.length > 0 ? (
+                filteredImages.map((image) => (
+                  <motion.div
+                    key={image.id}
+                    variants={{
+                      hidden: { y: 20, opacity: 0 },
+                      show: { y: 0, opacity: 1 }
+                    }}
+                  >
+                    <ImageCard image={image} />
+                  </motion.div>
+                ))
+              ) : (
+                <div className="col-span-full py-10 text-center">
+                  <p className="text-gray-500 dark:text-gray-400">No images found matching your criteria.</p>
+                  <button 
+                    onClick={resetFilters}
+                    className="mt-4 px-4 py-2 rounded-lg bg-cricket-red text-white text-sm"
+                  >
+                    Reset Filters
+                  </button>
+                </div>
+              )}
             </motion.div>
             
-            <div className="mt-12 flex justify-center">
-              <button className="px-6 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-                Load More
-              </button>
-            </div>
+            {filteredImages.length > 0 && (
+              <div className="mt-12 flex justify-center">
+                <button className="px-6 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                  Load More
+                </button>
+              </div>
+            )}
           </>
         )}
       </main>
