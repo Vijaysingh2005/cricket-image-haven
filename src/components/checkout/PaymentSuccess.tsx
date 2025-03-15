@@ -1,9 +1,9 @@
-
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { CheckCircle2, Download, Home, User, Copy, Clock, Calendar, IndianRupee, FileText } from 'lucide-react';
+import { Loader2 } from '@/components/ui/custom-icons';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from 'sonner';
 import confetti from 'canvas-confetti';
@@ -18,7 +18,6 @@ const PaymentSuccess = ({ transactionId, navigate }: PaymentSuccessProps) => {
   const [isDownloading, setIsDownloading] = useState(false);
   
   useEffect(() => {
-    // Trigger confetti effect
     const duration = 3 * 1000;
     const animationEnd = Date.now() + duration;
     const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
@@ -36,7 +35,6 @@ const PaymentSuccess = ({ transactionId, navigate }: PaymentSuccessProps) => {
 
       const particleCount = 50 * (timeLeft / duration);
       
-      // since particles fall down, start a bit higher than random
       confetti({
         ...defaults,
         particleCount,
@@ -62,7 +60,6 @@ const PaymentSuccess = ({ transactionId, navigate }: PaymentSuccessProps) => {
   const handleDownloadReceipt = () => {
     setIsDownloading(true);
     
-    // Simulate download process
     setTimeout(() => {
       setIsDownloading(false);
       toast.success("Receipt downloaded successfully");
@@ -72,7 +69,6 @@ const PaymentSuccess = ({ transactionId, navigate }: PaymentSuccessProps) => {
   const handleDownloadImages = () => {
     setIsDownloading(true);
     
-    // Simulate download process
     setTimeout(() => {
       setIsDownloading(false);
       toast.success("Images are ready to download");
