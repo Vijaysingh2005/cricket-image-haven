@@ -6,7 +6,7 @@ import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ArrowLeft, CreditCard, ShieldCheck, IndianRupee, Smartphone, Lock, CheckCircle2, AlertCircle } from 'lucide-react';
+import { ArrowLeft, CreditCard, ShieldCheck, IndianRupee, Smartphone, Lock, CheckCircle2, AlertCircle, PaypalIcon } from 'lucide-react';
 import Header from '@/components/Header';
 import Navigation from '@/components/Navigation';
 import PaymentForm from '@/components/checkout/PaymentForm';
@@ -14,6 +14,9 @@ import PaymentSuccess from '@/components/checkout/PaymentSuccess';
 import UPIPayment from '@/components/checkout/UPIPayment';
 import NetBankingPayment from '@/components/checkout/NetBankingPayment';
 import WalletPayment from '@/components/checkout/WalletPayment';
+import PaypalPayment from '@/components/checkout/PaypalPayment';
+import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
+import { Progress } from '@/components/ui/progress';
 
 export interface CartItem {
   id: string;
@@ -29,6 +32,10 @@ const CheckoutPage = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
   const [transactionId, setTransactionId] = useState("");
+  const [paymentError, setPaymentError] = useState<string | null>(null);
+  const [processingStage, setProcessingStage] = useState<string | null>(null);
+  const [processingProgress, setProcessingProgress] = useState(0);
+  const [activeTab, setActiveTab] = useState("card");
   
   // Get cart items from location state or use empty array if none
   const cartItems: CartItem[] = location.state?.cartItems || [];
@@ -41,16 +48,53 @@ const CheckoutPage = () => {
   };
 
   const processPayment = (paymentMethod: string, paymentDetails: any) => {
+    // Reset errors
+    setPaymentError(null);
     setIsProcessing(true);
     
-    // Simulate payment processing with a timeout
-    setTimeout(() => {
-      // Simulate 90% success rate
-      const isSuccessful = Math.random() < 0.9;
+    // Track payment progress
+    setProcessingStage("Initializing payment");
+    setProcessingProgress(10);
+    
+    // Simulated payment flow with multiple stages
+    const simulatePaymentFlow = () => {
+      setTimeout(() => {
+        setProcessingStage("Verifying details");
+        setProcessingProgress(30);
+        
+        setTimeout(() => {
+          setProcessingStage("Processing payment");
+          setProcessingProgress(60);
+          
+          setTimeout(() => {
+            setProcessingStage("Confirming transaction");
+            setProcessingProgress(90);
+            
+            setTimeout(() => {
+              // Simulated response after processing
+              finishPaymentProcess();
+            }, 500);
+          }, 600);
+        }, 500);
+      }, 400);
+    };
+    
+    // Start the payment flow simulation
+    simulatePaymentFlow();
+  };
+  
+  const finishPaymentProcess = () => {
+    // Simulate 90% success rate
+    const isSuccessful = Math.random() < 0.9;
+    
+    if (isSuccessful) {
+      const txnId = `TXN${Math.floor(Math.random() * 1000000)}`;
+      setTransactionId(txnId);
+      setProcessingProgress(100);
+      setProcessingStage("Payment completed");
       
-      if (isSuccessful) {
-        const txnId = `TXN${Math.floor(Math.random() * 1000000)}`;
-        setTransactionId(txnId);
+      // Short delay before showing success screen
+      setTimeout(() => {
         setPaymentSuccess(true);
         setIsProcessing(false);
         
@@ -70,18 +114,37 @@ const CheckoutPage = () => {
         
         // Send email confirmation (simulated)
         sendEmailConfirmation(txnId, cartItems, total);
-      } else {
-        setIsProcessing(false);
-        toast.error("Payment Failed", {
-          description: "There was an issue processing your payment. Please try again.",
-        });
-      }
-    }, 2000);
+      }, 500);
+    } else {
+      setIsProcessing(false);
+      setProcessingProgress(0);
+      setProcessingStage(null);
+      
+      // Random error messages for demonstration
+      const errorMessages = [
+        "Payment was declined by your bank. Please try another payment method.",
+        "The payment service is temporarily unavailable. Please try again.",
+        "Your payment could not be authorized. Please check your details.",
+        "Network error occurred during payment processing. Please try again."
+      ];
+      
+      const errorMsg = errorMessages[Math.floor(Math.random() * errorMessages.length)];
+      setPaymentError(errorMsg);
+      
+      toast.error("Payment Failed", {
+        description: errorMsg,
+      });
+    }
   };
   
   const sendEmailConfirmation = (txnId: string, items: CartItem[], total: number) => {
     console.log(`Sending email confirmation for transaction ${txnId}`);
     // In a real app, this would call an API to send an email
+  };
+
+  const handleRetryPayment = () => {
+    setPaymentError(null);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   if (paymentSuccess) {
@@ -106,6 +169,34 @@ const CheckoutPage = () => {
           <h1 className="text-3xl font-bold">Secure Checkout</h1>
         </div>
 
+        {isProcessing && (
+          <Alert className="mb-6 border-blue-200 bg-blue-50">
+            <div className="flex flex-col space-y-2">
+              <div className="flex items-center">
+                <Loader2 className="h-4 w-4 animate-spin text-blue-500 mr-2" />
+                <AlertTitle className="text-blue-700">Processing Payment</AlertTitle>
+              </div>
+              <AlertDescription className="text-blue-600">
+                {processingStage}. Please don't close or refresh this page.
+              </AlertDescription>
+              <Progress value={processingProgress} className="h-1.5 mt-2" />
+            </div>
+          </Alert>
+        )}
+        
+        {paymentError && (
+          <Alert variant="destructive" className="mb-6">
+            <AlertCircle className="h-4 w-4" />
+            <AlertTitle>Payment Failed</AlertTitle>
+            <AlertDescription>
+              {paymentError}
+              <Button variant="outline" size="sm" onClick={handleRetryPayment} className="ml-4">
+                Try Again
+              </Button>
+            </AlertDescription>
+          </Alert>
+        )}
+
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Payment Methods */}
           <div className="lg:col-span-2">
@@ -117,8 +208,8 @@ const CheckoutPage = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <Tabs defaultValue="card" className="w-full">
-                  <TabsList className="grid grid-cols-4 mb-8">
+                <Tabs defaultValue={activeTab} onValueChange={setActiveTab} className="w-full">
+                  <TabsList className="grid grid-cols-5 mb-8">
                     <TabsTrigger value="card" className="flex flex-col items-center gap-2 py-3">
                       <CreditCard className="h-5 w-5" />
                       <span className="text-xs">Card</span>
@@ -134,6 +225,10 @@ const CheckoutPage = () => {
                     <TabsTrigger value="wallet" className="flex flex-col items-center gap-2 py-3">
                       <ShieldCheck className="h-5 w-5" />
                       <span className="text-xs">Wallets</span>
+                    </TabsTrigger>
+                    <TabsTrigger value="paypal" className="flex flex-col items-center gap-2 py-3">
+                      <PaypalIcon className="h-5 w-5" />
+                      <span className="text-xs">PayPal</span>
                     </TabsTrigger>
                   </TabsList>
                   
@@ -164,6 +259,13 @@ const CheckoutPage = () => {
                       isProcessing={isProcessing}
                     />
                   </TabsContent>
+                  
+                  <TabsContent value="paypal">
+                    <PaypalPayment 
+                      onSubmit={(details) => processPayment('paypal', details)} 
+                      isProcessing={isProcessing}
+                    />
+                  </TabsContent>
                 </Tabs>
               </CardContent>
               <CardFooter className="flex-col space-y-2 items-start border-t pt-4">
@@ -173,7 +275,7 @@ const CheckoutPage = () => {
                 </div>
                 <div className="flex items-center text-sm text-muted-foreground">
                   <ShieldCheck className="mr-2 h-4 w-4" />
-                  Your personal data is protected
+                  Your personal data is protected by SSL/TLS encryption
                 </div>
               </CardFooter>
             </Card>
