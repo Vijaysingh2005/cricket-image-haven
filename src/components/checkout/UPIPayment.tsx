@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { QrCode, At, Loader2 } from 'lucide-react';
+import { QrCode, AtSign, Loader2 } from 'lucide-react';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 
 interface UPIPaymentProps {
@@ -55,7 +55,7 @@ const UPIPayment = ({ onSubmit, isProcessing }: UPIPaymentProps) => {
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="id" id="upi-id" />
                     <label htmlFor="upi-id" className="cursor-pointer flex items-center">
-                      <At className="mr-2 h-4 w-4" />
+                      <AtSign className="mr-2 h-4 w-4" />
                       <span>Pay via UPI ID</span>
                     </label>
                   </div>
@@ -87,7 +87,7 @@ const UPIPayment = ({ onSubmit, isProcessing }: UPIPaymentProps) => {
                       {...field}
                       className="pl-10"
                     />
-                    <At className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                    <AtSign className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                   </div>
                 </FormControl>
                 <FormMessage />
