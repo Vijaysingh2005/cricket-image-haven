@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '@/components/ui/table';
 import { toast } from 'sonner';
+import { useNavigate } from 'react-router-dom';
 import Header from '@/components/Header';
 import Navigation from '@/components/Navigation';
 
@@ -18,6 +19,7 @@ interface CartItem {
 }
 
 const CartPage = () => {
+  const navigate = useNavigate();
   // Sample cart items - in a real app, these would come from a state management system
   const [cartItems, setCartItems] = useState<CartItem[]>([
     {
@@ -63,8 +65,19 @@ const CartPage = () => {
   };
 
   const proceedToCheckout = () => {
-    toast.info('Proceeding to checkout...');
-    // In a real app, this would navigate to a checkout page
+    const subtotal = calculateSubtotal();
+    const tax = subtotal * 0.07;
+    const total = subtotal + tax;
+    
+    // Navigate to checkout page with cart data
+    navigate('/checkout', { 
+      state: { 
+        cartItems,
+        subtotal,
+        tax,
+        total
+      } 
+    });
   };
 
   const pageVariants = {
@@ -114,7 +127,7 @@ const CartPage = () => {
                           </div>
                         </TableCell>
                         <TableCell className="font-medium">{item.name}</TableCell>
-                        <TableCell>${item.price.toFixed(2)}</TableCell>
+                        <TableCell>₹{(item.price * 83.5).toFixed(2)}</TableCell>
                         <TableCell>
                           <div className="flex items-center gap-2">
                             <Button
@@ -137,7 +150,7 @@ const CartPage = () => {
                           </div>
                         </TableCell>
                         <TableCell className="font-medium">
-                          ${(item.price * item.quantity).toFixed(2)}
+                          ₹{(item.price * item.quantity * 83.5).toFixed(2)}
                         </TableCell>
                         <TableCell>
                           <Button
@@ -163,16 +176,16 @@ const CartPage = () => {
                   <div className="space-y-2">
                     <div className="flex justify-between">
                       <span>Subtotal</span>
-                      <span>${calculateSubtotal().toFixed(2)}</span>
+                      <span>₹{(calculateSubtotal() * 83.5).toFixed(2)}</span>
                     </div>
                     <div className="flex justify-between">
                       <span>Taxes</span>
-                      <span>${(calculateSubtotal() * 0.07).toFixed(2)}</span>
+                      <span>₹{(calculateSubtotal() * 0.07 * 83.5).toFixed(2)}</span>
                     </div>
                     <div className="border-t pt-2 mt-2">
                       <div className="flex justify-between font-semibold">
                         <span>Total</span>
-                        <span>${(calculateSubtotal() * 1.07).toFixed(2)}</span>
+                        <span>₹{(calculateSubtotal() * 1.07 * 83.5).toFixed(2)}</span>
                       </div>
                     </div>
                   </div>

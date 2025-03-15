@@ -1,63 +1,83 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Search, Download, Eye } from 'lucide-react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import ImageViewer from '@/components/ImageViewer';
+import { toast } from 'sonner';
 
-// Mock purchased images data
-const mockPurchasedImages = [
-  {
-    id: 1,
-    title: 'Virat Kohli Century Celebration',
-    url: 'https://placehold.co/600x400?text=Virat+Kohli',
-    date: '2023-03-15',
-    price: 5.99,
-  },
-  {
-    id: 2,
-    title: 'MS Dhoni Helicopter Shot',
-    url: 'https://placehold.co/600x400?text=MS+Dhoni',
-    date: '2023-02-28',
-    price: 4.99,
-  },
-  {
-    id: 3,
-    title: 'Rohit Sharma Double Century',
-    url: 'https://placehold.co/600x400?text=Rohit+Sharma',
-    date: '2023-01-10',
-    price: 6.99,
-  },
-  {
-    id: 4,
-    title: 'Jasprit Bumrah Yorker',
-    url: 'https://placehold.co/600x400?text=Jasprit+Bumrah',
-    date: '2022-12-05',
-    price: 3.99,
-  },
-  {
-    id: 5,
-    title: 'KL Rahul Cover Drive',
-    url: 'https://placehold.co/600x400?text=KL+Rahul',
-    date: '2022-11-20',
-    price: 4.99,
-  },
-];
+// Define the type for purchased images
+interface PurchasedImage {
+  id: number;
+  title: string;
+  url: string;
+  date: string;
+  price: number;
+}
 
 const PurchasedImages = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [viewImage, setViewImage] = useState<{url: string, title: string} | null>(null);
+  const [purchasedImages, setPurchasedImages] = useState<PurchasedImage[]>([]);
+  
+  // Load purchased images from localStorage on component mount
+  useEffect(() => {
+    const storedImages = localStorage.getItem('purchasedImages');
+    if (storedImages) {
+      const parsedImages = JSON.parse(storedImages);
+      setPurchasedImages(parsedImages);
+    } else {
+      // If no stored images, use mock data as fallback
+      setPurchasedImages([
+        {
+          id: 1,
+          title: 'Virat Kohli Century Celebration',
+          url: 'https://placehold.co/600x400?text=Virat+Kohli',
+          date: '2023-03-15',
+          price: 5.99,
+        },
+        {
+          id: 2,
+          title: 'MS Dhoni Helicopter Shot',
+          url: 'https://placehold.co/600x400?text=MS+Dhoni',
+          date: '2023-02-28',
+          price: 4.99,
+        },
+        {
+          id: 3,
+          title: 'Rohit Sharma Double Century',
+          url: 'https://placehold.co/600x400?text=Rohit+Sharma',
+          date: '2023-01-10',
+          price: 6.99,
+        },
+        {
+          id: 4,
+          title: 'Jasprit Bumrah Yorker',
+          url: 'https://placehold.co/600x400?text=Jasprit+Bumrah',
+          date: '2022-12-05',
+          price: 3.99,
+        },
+        {
+          id: 5,
+          title: 'KL Rahul Cover Drive',
+          url: 'https://placehold.co/600x400?text=KL+Rahul',
+          date: '2022-11-20',
+          price: 4.99,
+        },
+      ]);
+    }
+  }, []);
   
   // Filter images based on search term
-  const filteredImages = mockPurchasedImages.filter(image => 
+  const filteredImages = purchasedImages.filter(image => 
     image.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
   
-  // Function to download image (mock)
+  // Function to download image
   const handleDownload = (url: string, title: string) => {
-    console.log(`Downloading image: ${title}`);
     // In a real app, you would handle actual download logic here
+    console.log(`Downloading image: ${title}`);
     
     // Create a simulated download effect
     const link = document.createElement('a');
@@ -66,6 +86,10 @@ const PurchasedImages = () => {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    
+    toast.success("Download started", {
+      description: `${title} is being downloaded to your device.`
+    });
   };
 
   return (
@@ -96,6 +120,7 @@ const PurchasedImages = () => {
                   src={image.url} 
                   alt={image.title}
                   className="w-full h-full object-cover"
+                  onContextMenu={(e) => e.preventDefault()} // Prevent right-click
                 />
                 <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-4">
                   <Button 
@@ -117,7 +142,7 @@ const PurchasedImages = () => {
                 <h3 className="font-medium text-lg mb-1 truncate">{image.title}</h3>
                 <div className="flex justify-between text-sm text-muted-foreground">
                   <span>Purchased: {new Date(image.date).toLocaleDateString()}</span>
-                  <span>${image.price}</span>
+                  <span>₹{(image.price * 83.5).toFixed(2)}</span>
                 </div>
               </div>
             </div>
@@ -143,11 +168,11 @@ const PurchasedImages = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {mockPurchasedImages.map(image => (
+              {purchasedImages.map(image => (
                 <TableRow key={image.id}>
                   <TableCell>{image.title}</TableCell>
                   <TableCell>{new Date(image.date).toLocaleDateString()}</TableCell>
-                  <TableCell>${image.price}</TableCell>
+                  <TableCell>₹{(image.price * 83.5).toFixed(2)}</TableCell>
                   <TableCell className="text-right">
                     <Button 
                       size="sm" 
