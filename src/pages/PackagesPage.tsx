@@ -1,5 +1,4 @@
-
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Check, X, Download, Package as PackageIcon, Camera, ImageIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -7,12 +6,13 @@ import { Badge } from '@/components/ui/badge';
 import { toast } from "sonner";
 import Header from '@/components/Header';
 import Navigation from '@/components/Navigation';
+import { useNavigate } from 'react-router-dom';
 
 const packages = [
   {
     id: 1,
     title: 'Basic',
-    price: 29,
+    price: 2499,
     frequency: 'month',
     description: 'Perfect for casual photo enthusiasts',
     features: [
@@ -30,7 +30,7 @@ const packages = [
   {
     id: 2,
     title: 'Pro',
-    price: 99,
+    price: 8299,
     frequency: 'month',
     description: 'Ideal for professionals and creators',
     features: [
@@ -48,7 +48,7 @@ const packages = [
   {
     id: 3,
     title: 'Enterprise',
-    price: 249,
+    price: 20899,
     frequency: 'month',
     description: 'For businesses with advanced needs',
     features: [
@@ -66,7 +66,22 @@ const packages = [
 ];
 
 const PackagesPage = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const navigate = useNavigate();
+
   const handleSubscribe = (packageId: number) => {
+    const authToken = localStorage.getItem('authToken');
+    if (!authToken) {
+      toast.error("You need to be logged in to subscribe", {
+        description: "Redirecting you to the login page."
+      });
+      
+      setTimeout(() => {
+        navigate('/account');
+      }, 1500);
+      return;
+    }
+    
     toast.success(`Subscription process initiated for package ID: ${packageId}`, {
       description: "Please complete the payment process on the next screen."
     });
@@ -112,7 +127,7 @@ const PackagesPage = () => {
               
               <h3 className="text-2xl font-bold text-center mb-2">{pkg.title}</h3>
               <div className="text-center mb-4">
-                <span className="text-4xl font-bold">${pkg.price}</span>
+                <span className="text-4xl font-bold">₹{pkg.price}</span>
                 <span className="text-gray-500 dark:text-gray-400">/{pkg.frequency}</span>
               </div>
               

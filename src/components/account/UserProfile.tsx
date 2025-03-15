@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Edit, Camera, Check } from 'lucide-react';
+import { toast } from 'sonner';
 
 const UserProfile = () => {
   // Mock user data - in a real app this would come from an API or context
@@ -19,6 +20,8 @@ const UserProfile = () => {
   
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState(userData);
+  const [avatarFile, setAvatarFile] = useState<File | null>(null);
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
   
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -27,8 +30,38 @@ const UserProfile = () => {
   
   const handleSave = () => {
     // In a real app, you would make an API call here
+    // If we have a new avatar file, process it
+    if (avatarFile) {
+      // Create an object URL for the file
+      const avatarUrl = URL.createObjectURL(avatarFile);
+      setFormData(prev => ({ ...prev, avatarUrl }));
+    }
+    
     setUserData(formData);
     setIsEditing(false);
+    toast.success("Profile updated successfully!");
+  };
+
+  const handleAvatarClick = () => {
+    if (isEditing && fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const file = e.target.files[0];
+      setAvatarFile(file);
+      
+      // Preview the image
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        if (event.target && event.target.result) {
+          setFormData(prev => ({ ...prev, avatarUrl: event.target.result as string }));
+        }
+      };
+      reader.readAsDataURL(file);
+    }
   };
   
   const getInitials = (name: string) => {
@@ -48,17 +81,29 @@ const UserProfile = () => {
         </CardHeader>
         <CardContent className="flex flex-col items-center">
           <div className="relative mb-6">
-            <Avatar className="h-32 w-32">
-              <AvatarImage src={userData.avatarUrl} alt={userData.name} />
+            <Avatar className="h-32 w-32 cursor-pointer" onClick={handleAvatarClick}>
+              <AvatarImage src={formData.avatarUrl} alt={formData.name} />
               <AvatarFallback className="text-3xl bg-cricket-red text-white">
-                {getInitials(userData.name)}
+                {getInitials(formData.name)}
               </AvatarFallback>
             </Avatar>
             {isEditing && (
               <div className="absolute -bottom-2 right-0">
-                <Button size="icon" variant="outline" className="rounded-full h-10 w-10 hover:bg-cricket-red hover:text-white">
+                <Button 
+                  size="icon" 
+                  variant="outline" 
+                  className="rounded-full h-10 w-10 hover:bg-cricket-red hover:text-white"
+                  onClick={handleAvatarClick}
+                >
                   <Camera size={16} />
                 </Button>
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  className="hidden"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                />
               </div>
             )}
           </div>

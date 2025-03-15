@@ -2,8 +2,16 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ChevronRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const CTASection = () => {
+  const navigate = useNavigate();
+
+  const handleGetStarted = (packageId: number) => {
+    // Navigate to cart page
+    navigate('/cart');
+  };
+
   return (
     <section className="relative py-20 overflow-hidden">
       {/* Background with diagonal cut */}
@@ -42,19 +50,22 @@ const CTASection = () => {
           >
             {[
               {
+                id: 1,
                 title: "Starter Pack",
-                price: "$14.99",
+                price: "₹1,249",
                 features: ["10 HD images", "30 days access", "Personal use"],
               },
               {
+                id: 2,
                 title: "Pro Pack",
-                price: "$29.99",
+                price: "₹2,499",
                 features: ["30 HD images", "60 days access", "Commercial license"],
                 highlighted: true,
               },
               {
+                id: 3,
                 title: "Team Pack",
-                price: "$49.99",
+                price: "₹4,199",
                 features: ["100 HD images", "90 days access", "Extended license"],
               },
             ].map((pack, index) => (
@@ -82,13 +93,16 @@ const CTASection = () => {
                     </li>
                   ))}
                 </ul>
-                <button className={`
-                  w-full py-2 rounded-xl font-medium
-                  ${pack.highlighted 
-                    ? 'bg-cricket-red text-white hover:bg-cricket-red/90' 
-                    : 'bg-gray-100 text-gray-900 hover:bg-gray-200'}
-                  transition-colors
-                `}>
+                <button 
+                  className={`
+                    w-full py-2 rounded-xl font-medium
+                    ${pack.highlighted 
+                      ? 'bg-cricket-red text-white hover:bg-cricket-red/90' 
+                      : 'bg-gray-100 text-gray-900 hover:bg-gray-200'}
+                    transition-colors
+                  `}
+                  onClick={() => handleGetStarted(pack.id)}
+                >
                   Get Started
                 </button>
               </div>

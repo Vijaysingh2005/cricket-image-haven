@@ -5,6 +5,7 @@ import { Lock, EyeOff, Download, Eye } from 'lucide-react';
 import { motion } from 'framer-motion';
 import ImageViewer from './ImageViewer';
 import { toast } from "sonner";
+import { useNavigate } from 'react-router-dom';
 
 interface ImageCardProps {
   image: {
@@ -20,11 +21,17 @@ const ImageCard = ({ image }: ImageCardProps) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isHovered, setIsHovered] = useState(false);
   const [viewerOpen, setViewerOpen] = useState(false);
+  const navigate = useNavigate();
 
   const handleImageClick = () => {
     if (!image.isPremium) {
       setViewerOpen(true);
     }
+  };
+
+  const handlePurchase = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    navigate('/cart');
   };
 
   const handleDownload = (e: React.MouseEvent) => {
@@ -68,8 +75,9 @@ const ImageCard = ({ image }: ImageCardProps) => {
               <p className="text-sm opacity-80 mb-4">Purchase to unlock this image</p>
               <button 
                 className="mt-2 px-4 py-2 rounded-full bg-cricket-red text-white text-sm font-medium hover:bg-cricket-red/90 transition-colors"
+                onClick={handlePurchase}
               >
-                ${image.price.toFixed(2)} - Unlock
+                ₹{(image.price * 83.5).toFixed(2)} - Unlock
               </button>
             </div>
           )}
@@ -108,7 +116,7 @@ const ImageCard = ({ image }: ImageCardProps) => {
           
           <div className="mt-2 flex justify-between items-center">
             {image.isPremium ? (
-              <span className="text-cricket-red font-semibold">${image.price.toFixed(2)}</span>
+              <span className="text-cricket-red font-semibold">₹{(image.price * 83.5).toFixed(2)}</span>
             ) : (
               <span className="text-green-600 dark:text-green-400 font-semibold">Free</span>
             )}

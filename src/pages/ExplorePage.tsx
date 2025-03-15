@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
@@ -8,7 +7,7 @@ import Navigation from '@/components/Navigation';
 import Header from '@/components/Header';
 import { Search, Filter, ArrowUpDown, CheckCircle, X } from 'lucide-react';
 
-// Sample images data
+// Sample images data with categories
 const sampleImages = [
   {
     id: 1,
@@ -16,6 +15,7 @@ const sampleImages = [
     imageUrl: 'https://images.pexels.com/photos/3628912/pexels-photo-3628912.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
     isPremium: true,
     price: 5.99,
+    category: 'Team Celebrations',
   },
   {
     id: 2,
@@ -23,6 +23,7 @@ const sampleImages = [
     imageUrl: 'https://images.pexels.com/photos/3659610/pexels-photo-3659610.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
     isPremium: true,
     price: 4.99,
+    category: 'Match Highlights',
   },
   {
     id: 3,
@@ -30,6 +31,7 @@ const sampleImages = [
     imageUrl: 'https://images.pexels.com/photos/2570139/pexels-photo-2570139.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
     isPremium: false,
     price: 0,
+    category: 'Stadium Views',
   },
   {
     id: 4,
@@ -37,6 +39,7 @@ const sampleImages = [
     imageUrl: 'https://images.pexels.com/photos/2385477/pexels-photo-2385477.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
     isPremium: true,
     price: 6.99,
+    category: 'Player Portraits',
   },
   {
     id: 5,
@@ -44,6 +47,7 @@ const sampleImages = [
     imageUrl: 'https://images.pexels.com/photos/3621104/pexels-photo-3621104.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
     isPremium: true,
     price: 7.99,
+    category: 'Team Celebrations',
   },
   {
     id: 6,
@@ -51,6 +55,7 @@ const sampleImages = [
     imageUrl: 'https://images.pexels.com/photos/3621102/pexels-photo-3621102.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
     isPremium: false,
     price: 0,
+    category: 'Match Highlights',
   },
   {
     id: 7,
@@ -58,6 +63,7 @@ const sampleImages = [
     imageUrl: 'https://images.pexels.com/photos/4404931/pexels-photo-4404931.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
     isPremium: true,
     price: 8.99,
+    category: 'Team Celebrations',
   },
   {
     id: 8,
@@ -65,6 +71,7 @@ const sampleImages = [
     imageUrl: 'https://images.pexels.com/photos/114296/pexels-photo-114296.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
     isPremium: true,
     price: 5.99,
+    category: 'Stadium Views',
   },
   {
     id: 9,
@@ -72,6 +79,7 @@ const sampleImages = [
     imageUrl: 'https://images.pexels.com/photos/4498243/pexels-photo-4498243.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
     isPremium: false,
     price: 0,
+    category: 'Vintage Classics',
   },
 ];
 
@@ -142,10 +150,17 @@ const ExplorePage = () => {
     
     if (category === "All Images") {
       setFilteredImages(images);
+      toast.info("Showing all images");
     } else {
-      // In a real app, this would filter based on category data
-      // For this demo, we'll just show a toast
-      toast.info(`Category selected: ${category}`);
+      // Filter images based on selected category
+      const categoryResults = images.filter(image => image.category === category);
+      setFilteredImages(categoryResults);
+      
+      if (categoryResults.length === 0) {
+        toast.info(`No images found in the ${category} category.`);
+      } else {
+        toast.success(`Showing ${categoryResults.length} images in ${category} category`);
+      }
     }
   };
 
@@ -160,6 +175,11 @@ const ExplorePage = () => {
   // Apply filters
   const applyFilters = () => {
     let results = [...images];
+    
+    // Filter by category first if not "All Images"
+    if (activeCategory !== "All Images") {
+      results = results.filter(img => img.category === activeCategory);
+    }
     
     // Filter by free/premium
     if (filters.onlyFree) {
@@ -192,9 +212,15 @@ const ExplorePage = () => {
       resolution: "All Resolutions"
     });
     
-    setFilteredImages(images);
+    // Keep the current category filter
+    if (activeCategory === "All Images") {
+      setFilteredImages(images);
+    } else {
+      const categoryResults = images.filter(image => image.category === activeCategory);
+      setFilteredImages(categoryResults);
+    }
+    
     setSearchTerm("");
-    setActiveCategory("All Images");
     toast.info("Filters have been reset.");
   };
 

@@ -4,11 +4,13 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from '@/components/ui/button';
 import { Check, Calendar, RefreshCw, AlertTriangle } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
+import { toast } from 'sonner';
+import { useNavigate } from 'react-router-dom';
 
 // Mock subscription data
 const mockSubscription = {
   name: 'Premium Package',
-  price: 29.99,
+  price: 2499,
   billingCycle: 'monthly',
   startDate: '2023-01-15',
   endDate: '2023-12-15',
@@ -26,6 +28,8 @@ const mockSubscription = {
 };
 
 const Subscriptions = () => {
+  const navigate = useNavigate();
+
   // Calculate days remaining
   const endDate = new Date(mockSubscription.endDate);
   const today = new Date();
@@ -38,6 +42,25 @@ const Subscriptions = () => {
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  };
+
+  // Handle button clicks
+  const handleManageSubscription = () => {
+    toast.info("Opening subscription management interface...");
+  };
+
+  const handleUpgradePackage = () => {
+    navigate('/packages');
+  };
+
+  const handleDowngrade = () => {
+    toast.info("Preparing to downgrade your package...");
+    // In a real app, this would open a confirmation dialog
+  };
+
+  const handleViewAllTransactions = () => {
+    toast.info("Loading all transaction history...");
+    // In a real app, this would navigate to a transactions page
   };
 
   return (
@@ -53,7 +76,7 @@ const Subscriptions = () => {
               <div className="flex flex-col md:flex-row justify-between md:items-center gap-4">
                 <div>
                   <h3 className="text-2xl font-bold">{mockSubscription.name}</h3>
-                  <p className="text-muted-foreground">${mockSubscription.price}/month</p>
+                  <p className="text-muted-foreground">₹{mockSubscription.price}/month</p>
                 </div>
                 <div className="flex items-center gap-2 px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-400 rounded-full text-sm">
                   <span className="h-2 w-2 rounded-full bg-green-500"></span>
@@ -122,8 +145,8 @@ const Subscriptions = () => {
               </div>
             </CardContent>
             <CardFooter className="flex justify-between border-t pt-6">
-              <Button variant="outline">Manage Subscription</Button>
-              <Button>Upgrade Package</Button>
+              <Button variant="outline" onClick={handleManageSubscription}>Manage Subscription</Button>
+              <Button onClick={handleUpgradePackage}>Upgrade Package</Button>
             </CardFooter>
           </Card>
         </div>
@@ -151,7 +174,7 @@ const Subscriptions = () => {
                       </p>
                     </div>
                     <div className="text-right">
-                      <p className="font-medium">$29.99</p>
+                      <p className="font-medium">₹2,499</p>
                       <p className="text-xs text-green-600 dark:text-green-400">Paid</p>
                     </div>
                   </div>
@@ -159,7 +182,7 @@ const Subscriptions = () => {
               })}
             </CardContent>
             <CardFooter className="border-t pt-4">
-              <Button variant="link" className="w-full">View All Transactions</Button>
+              <Button variant="link" className="w-full" onClick={handleViewAllTransactions}>View All Transactions</Button>
             </CardFooter>
           </Card>
         </div>
@@ -179,7 +202,7 @@ const Subscriptions = () => {
                 <CardDescription>For casual cricket fans</CardDescription>
               </CardHeader>
               <CardContent className="pb-3 space-y-4">
-                <div className="text-3xl font-bold">$9.99 <span className="text-sm font-normal text-muted-foreground">/month</span></div>
+                <div className="text-3xl font-bold">₹799 <span className="text-sm font-normal text-muted-foreground">/month</span></div>
                 <ul className="space-y-2 text-sm">
                   <li className="flex items-start">
                     <Check className="h-4 w-4 mr-2 text-green-500 shrink-0 mt-0.5" />
@@ -196,7 +219,7 @@ const Subscriptions = () => {
                 </ul>
               </CardContent>
               <CardFooter>
-                <Button variant="outline" className="w-full">Downgrade</Button>
+                <Button variant="outline" className="w-full" onClick={handleDowngrade}>Downgrade</Button>
               </CardFooter>
             </Card>
             
@@ -212,7 +235,7 @@ const Subscriptions = () => {
                 </div>
               </CardHeader>
               <CardContent className="pb-3 space-y-4">
-                <div className="text-3xl font-bold">$29.99 <span className="text-sm font-normal text-muted-foreground">/month</span></div>
+                <div className="text-3xl font-bold">₹2,499 <span className="text-sm font-normal text-muted-foreground">/month</span></div>
                 <ul className="space-y-2 text-sm">
                   <li className="flex items-start">
                     <Check className="h-4 w-4 mr-2 text-green-500 shrink-0 mt-0.5" />
@@ -244,7 +267,7 @@ const Subscriptions = () => {
                 <CardDescription>For professionals</CardDescription>
               </CardHeader>
               <CardContent className="pb-3 space-y-4">
-                <div className="text-3xl font-bold">$49.99 <span className="text-sm font-normal text-muted-foreground">/month</span></div>
+                <div className="text-3xl font-bold">₹4,199 <span className="text-sm font-normal text-muted-foreground">/month</span></div>
                 <ul className="space-y-2 text-sm">
                   <li className="flex items-start">
                     <Check className="h-4 w-4 mr-2 text-green-500 shrink-0 mt-0.5" />
@@ -265,7 +288,7 @@ const Subscriptions = () => {
                 </ul>
               </CardContent>
               <CardFooter>
-                <Button className="w-full">Upgrade</Button>
+                <Button className="w-full" onClick={handleUpgradePackage}>Upgrade</Button>
               </CardFooter>
             </Card>
           </div>
