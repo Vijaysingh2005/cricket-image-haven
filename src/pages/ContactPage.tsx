@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { 
@@ -117,9 +116,8 @@ const ContactPage = () => {
             </div>
             <h3 className="font-bold text-lg mb-2">Our Location</h3>
             <p className="text-gray-600 dark:text-gray-400">
-              123 Cricket Lane<br />
-              Mumbai, Maharashtra 400001<br />
-              India
+              312605 Pratapgarh<br />
+              Rajasthan, India
             </p>
           </div>
           
@@ -130,10 +128,10 @@ const ContactPage = () => {
             <h3 className="font-bold text-lg mb-2">Phone Number</h3>
             <p className="text-gray-600 dark:text-gray-400">
               General Inquiries:<br />
-              +91 98765 43210<br />
+              +91 8839354160<br />
               <br />
               Support:<br />
-              +91 98765 43211
+              +91 8839354160
             </p>
           </div>
           
@@ -144,7 +142,7 @@ const ContactPage = () => {
             <h3 className="font-bold text-lg mb-2">Email Address</h3>
             <p className="text-gray-600 dark:text-gray-400">
               General Inquiries:<br />
-              info@cricketimages.com<br />
+              vijaysinghsisodiya966@gmail.com<br />
               <br />
               Support:<br />
               support@cricketimages.com

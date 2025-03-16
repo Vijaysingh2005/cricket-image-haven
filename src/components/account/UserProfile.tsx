@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -9,13 +8,13 @@ import { Edit, Camera, Check } from 'lucide-react';
 import { toast } from 'sonner';
 
 const UserProfile = () => {
-  // Mock user data - in a real app this would come from an API or context
+  // Updated user data with Vijay Singh's information
   const [userData, setUserData] = useState({
-    name: 'John Doe',
-    email: 'john.doe@example.com',
-    phone: '+91 9876543210',
+    name: 'Vijay Singh',
+    email: 'vijaysinghsisodiya966@gmail.com',
+    phone: '+91 8839354160',
     avatarUrl: '',
-    bio: 'Cricket enthusiast and photographer'
+    bio: 'Cricket enthusiast and photographer from Rajasthan'
   });
   
   const [isEditing, setIsEditing] = useState(false);

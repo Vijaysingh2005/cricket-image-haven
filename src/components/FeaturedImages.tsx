@@ -1,49 +1,48 @@
-
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import ImageCard from './ImageCard';
 
-// Sample cricket images
+// Updated cricket images featuring Indian cricketers in 4K quality
 const sampleImages = [
   {
     id: 1,
-    title: 'Final Match Celebration',
-    imageUrl: 'https://images.pexels.com/photos/3628912/pexels-photo-3628912.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+    title: 'Virat Kohli Century Celebration',
+    imageUrl: 'https://images.unsplash.com/photo-1531415074968-036ba1b575da?q=80&w=2067&auto=format&fit=crop',
     isPremium: true,
-    price: 5.99,
+    price: 7.99,
   },
   {
     id: 2,
-    title: 'Perfect Batting Stance',
-    imageUrl: 'https://images.pexels.com/photos/3659610/pexels-photo-3659610.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+    title: 'Rohit Sharma Cover Drive',
+    imageUrl: 'https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?q=80&w=2073&auto=format&fit=crop',
     isPremium: true,
-    price: 4.99,
+    price: 6.99,
   },
   {
     id: 3,
-    title: 'Stadium Aerial View',
-    imageUrl: 'https://images.pexels.com/photos/2570139/pexels-photo-2570139.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+    title: 'Jasprit Bumrah Bowling Action',
+    imageUrl: 'https://images.unsplash.com/photo-1562077772-3bd8c3dfa4ac?q=80&w=1864&auto=format&fit=crop',
     isPremium: false,
     price: 0,
   },
   {
     id: 4,
-    title: 'Player Close-up',
-    imageUrl: 'https://images.pexels.com/photos/2385477/pexels-photo-2385477.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+    title: 'MS Dhoni Helicopter Shot',
+    imageUrl: 'https://images.unsplash.com/photo-1552053831-71594a27632d?q=80&w=1924&auto=format&fit=crop',
     isPremium: true,
-    price: 6.99,
+    price: 8.99,
   },
   {
     id: 5,
-    title: 'Team Huddle',
-    imageUrl: 'https://images.pexels.com/photos/3621104/pexels-photo-3621104.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+    title: 'Indian Team Victory Celebration',
+    imageUrl: 'https://images.unsplash.com/photo-1580397581145-cdb6a35b7d3f?q=80&w=2070&auto=format&fit=crop',
     isPremium: true,
-    price: 7.99,
+    price: 9.99,
   },
   {
     id: 6,
-    title: 'Critical Moment',
-    imageUrl: 'https://images.pexels.com/photos/3621102/pexels-photo-3621102.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+    title: 'Ravindra Jadeja Fielding',
+    imageUrl: 'https://images.unsplash.com/photo-1590156329625-4d017fa96bc6?q=80&w=1949&auto=format&fit=crop',
     isPremium: false,
     price: 0,
   }
