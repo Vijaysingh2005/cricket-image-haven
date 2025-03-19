@@ -1,58 +1,48 @@
-# Welcome to your Lovable project
+# Welcome to Your Project
 
-## Project info
+## Project Info
 
-**URL**: https://lovable.dev/projects/65bed5cd-f5fa-415f-9fee-c9479df98188
+**GitHub Repository**: [https://github.com/vijaysingh966/your-repo-name](https://github.com/vijaysingh966/cricket-image-haven)
 
-## How can I edit this code?
+## How to Edit This Code
 
-There are several ways of editing your application.
+You can edit this project using several methods:
 
-**Use Lovable**
+### **1. Clone the Repository and Use Your Preferred IDE**
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/65bed5cd-f5fa-415f-9fee-c9479df98188) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
+If you want to work locally using your own IDE, follow these steps:
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+# Step 1: Clone the repository using Git
+git clone https://github.com/vijaysingh966/cricket-image-haven.git
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+# Step 2: Navigate to the project directory
+cd your-repo-name
 
-# Step 3: Install the necessary dependencies.
-npm i
+# Step 3: Install dependencies
+npm install
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Step 4: Start the development server
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+### **2. Edit Directly in GitHub**
 
-- Navigate to the desired file(s).
+- Navigate to the desired file(s) in your repository.
 - Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+- Make your changes and commit them.
 
-**Use GitHub Codespaces**
+### **3. Use GitHub Codespaces**
 
 - Navigate to the main page of your repository.
 - Click on the "Code" button (green button) near the top right.
 - Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+- Click on "New codespace" to launch a new development environment.
+- Edit files directly within the Codespace and commit and push your changes once done.
 
-## What technologies are used for this project?
+## Technologies Used
 
-This project is built with .
+This project is built with:
 
 - Vite
 - TypeScript
@@ -60,10 +50,27 @@ This project is built with .
 - shadcn-ui
 - Tailwind CSS
 
-## How can I deploy this project?
+## How to Deploy This Project
 
-Simply open [Lovable](https://lovable.dev/projects/65bed5cd-f5fa-415f-9fee-c9479df98188) and click on Share -> Publish.
+You can deploy this project using **Netlify, Vercel, or GitHub Pages**. Follow these steps:
 
-## I want to use a custom domain - is that possible?
+### **Deploy on Netlify**
+1. Go to [Netlify](https://www.netlify.com/) and sign in.
+2. Click "New site from Git."
+3. Connect your GitHub repository.
+4. Set build command: `npm run build` and publish directory: `dist`.
+5. Click "Deploy" and wait for the process to complete.
 
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
+### **Deploy on Vercel**
+1. Go to [Vercel](https://vercel.com/) and sign in.
+2. Click "New Project" and import your repository.
+3. Set up build command: `npm run build`.
+4. Click "Deploy" and wait for the process to finish.
+
+## Contact
+
+📧 **Email**: vijaysinghsisodiya966@gmail.com  
+👤 **GitHub**: [@vijaysingh966](https://github.com/vijaysingh966)
+
+Feel free to contribute and star the repository if you like it! 🚀
+
