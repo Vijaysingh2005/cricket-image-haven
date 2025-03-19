@@ -13,7 +13,7 @@ const sampleImages = [
   {
     id: 1,
     title: 'Virat Kohli Batting Stance',
-    imageUrl: 'public/lovable-uploads/4f076883-0b2e-4bf3-9860-b45df9a1376a.png',
+    imageUrl: '/lovable-uploads/4f076883-0b2e-4bf3-9860-b45df9a1376a.png',
     isPremium: true,
     price: 5.99,
     category: 'Player Portraits',
@@ -21,7 +21,7 @@ const sampleImages = [
   {
     id: 2,
     title: 'Virat Kohli Celebrating',
-    imageUrl: 'public/lovable-uploads/81f1b811-7e63-4f8c-922d-c16b644f5fe1.png',
+    imageUrl: '/lovable-uploads/81f1b811-7e63-4f8c-922d-c16b644f5fe1.png',
     isPremium: true,
     price: 4.99,
     category: 'Match Highlights',
@@ -29,7 +29,7 @@ const sampleImages = [
   {
     id: 3,
     title: 'Kohli and Dhoni Celebrating',
-    imageUrl: 'public/lovable-uploads/d5c74238-bc60-4790-bcb6-f2c8cb30ccc1.png',
+    imageUrl: '/lovable-uploads/d5c74238-bc60-4790-bcb6-f2c8cb30ccc1.png',
     isPremium: false,
     price: 0,
     category: 'Team Celebrations',
@@ -37,7 +37,7 @@ const sampleImages = [
   {
     id: 4,
     title: 'Rohit Sharma Victory Pose',
-    imageUrl: 'public/lovable-uploads/889be52b-11a0-4158-a267-1a6e12e25219.png',
+    imageUrl: '/lovable-uploads/889be52b-11a0-4158-a267-1a6e12e25219.png',
     isPremium: true,
     price: 6.99,
     category: 'Player Portraits',
@@ -45,7 +45,7 @@ const sampleImages = [
   {
     id: 5,
     title: 'ICC Trophy Celebration',
-    imageUrl: 'public/lovable-uploads/f4c3f58a-682b-4499-ae30-77d869a5bbc7.png',
+    imageUrl: '/lovable-uploads/f4c3f58a-682b-4499-ae30-77d869a5bbc7.png',
     isPremium: true,
     price: 7.99,
     category: 'Team Celebrations',
@@ -53,7 +53,7 @@ const sampleImages = [
   {
     id: 6,
     title: 'Team India Champions',
-    imageUrl: 'public/lovable-uploads/80415f68-51b6-420c-aa4d-c05cf5bee1da.png',
+    imageUrl: '/lovable-uploads/80415f68-51b6-420c-aa4d-c05cf5bee1da.png',
     isPremium: false,
     price: 0,
     category: 'Match Highlights',
@@ -61,7 +61,7 @@ const sampleImages = [
   {
     id: 7,
     title: 'Kohli Champions Trophy',
-    imageUrl: 'public/lovable-uploads/8b8b423b-8cbc-44b9-8e17-eddb6cb3e891.png',
+    imageUrl: '/lovable-uploads/8b8b423b-8cbc-44b9-8e17-eddb6cb3e891.png',
     isPremium: true,
     price: 8.99,
     category: 'Team Celebrations',
@@ -69,7 +69,7 @@ const sampleImages = [
   {
     id: 8,
     title: 'Indian Cricket Collage',
-    imageUrl: 'public/lovable-uploads/188a94d0-0016-4e4c-8231-510a9ad285f1.png',
+    imageUrl: '/lovable-uploads/188a94d0-0016-4e4c-8231-510a9ad285f1.png',
     isPremium: true,
     price: 5.99,
     category: 'Vintage Classics',
@@ -77,7 +77,7 @@ const sampleImages = [
   {
     id: 9,
     title: 'Rohit Sharma Batting',
-    imageUrl: 'public/lovable-uploads/b6ea7585-492b-4a8a-8af5-72d99b1e56da.png',
+    imageUrl: '/lovable-uploads/b6ea7585-492b-4a8a-8af5-72d99b1e56da.png',
     isPremium: false,
     price: 0,
     category: 'Match Highlights',
@@ -85,7 +85,7 @@ const sampleImages = [
   {
     id: 10,
     title: 'Champagne Celebration',
-    imageUrl: 'public/lovable-uploads/4207e922-d250-41f8-83e7-d824a5d001fc.png',
+    imageUrl: '/lovable-uploads/4207e922-d250-41f8-83e7-d824a5d001fc.png',
     isPremium: true,
     price: 6.99,
     category: 'Team Celebrations',
@@ -93,7 +93,7 @@ const sampleImages = [
   {
     id: 11,
     title: 'Virat with Trophy',
-    imageUrl: 'public/lovable-uploads/b6bad409-087f-420e-bbff-668489dbdba7.png',
+    imageUrl: '/lovable-uploads/b6bad409-087f-420e-bbff-668489dbdba7.png',
     isPremium: true,
     price: 7.99,
     category: 'Team Celebrations',
@@ -101,7 +101,7 @@ const sampleImages = [
   {
     id: 12,
     title: 'ICC Champions Stage',
-    imageUrl: 'public/lovable-uploads/a7e9632f-b506-429d-aea7-438a38c35014.png',
+    imageUrl: '/lovable-uploads/a7e9632f-b506-429d-aea7-438a38c35014.png',
     isPremium: false,
     price: 0,
     category: 'Team Celebrations',
@@ -109,7 +109,7 @@ const sampleImages = [
   {
     id: 13,
     title: 'Kohli and Rohit Celebration',
-    imageUrl: 'public/lovable-uploads/bff1092b-b944-41a8-af82-b068a5ab9172.png',
+    imageUrl: '/lovable-uploads/bff1092b-b944-41a8-af82-b068a5ab9172.png',
     isPremium: true,
     price: 8.99,
     category: 'Team Celebrations',
@@ -117,7 +117,7 @@ const sampleImages = [
   {
     id: 14,
     title: 'Team India Trophy Lift',
-    imageUrl: 'public/lovable-uploads/a3615946-9884-4032-8ac0-dfb0a85c2f95.png',
+    imageUrl: '/lovable-uploads/a3615946-9884-4032-8ac0-dfb0a85c2f95.png',
     isPremium: true,
     price: 9.99,
     category: 'Team Celebrations',
@@ -125,7 +125,7 @@ const sampleImages = [
   {
     id: 15,
     title: 'Virat Kohli Celebration',
-    imageUrl: 'public/lovable-uploads/dc065369-b718-4afb-9f46-7ca3937565f0.png',
+    imageUrl: '/lovable-uploads/dc065369-b718-4afb-9f46-7ca3937565f0.png',
     isPremium: false,
     price: 0,
     category: 'Player Portraits',
@@ -133,7 +133,7 @@ const sampleImages = [
   {
     id: 16,
     title: 'Rohit Sharma Record',
-    imageUrl: 'public/lovable-uploads/4ab83bca-a0bc-42c4-83c4-55a3e4a05bf0.png',
+    imageUrl: '/lovable-uploads/4ab83bca-a0bc-42c4-83c4-55a3e4a05bf0.png',
     isPremium: true,
     price: 7.99,
     category: 'Player Portraits',
