@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import ImageCard from './ImageCard';
@@ -7,43 +6,43 @@ import ImageCard from './ImageCard';
 const sampleImages = [
   {
     id: 1,
-    title: 'Virat Kohli Batting Stance',
-    imageUrl: 'public/lovable-uploads/4f076883-0b2e-4bf3-9860-b45df9a1376a.png',
+    title: 'Virat Kohli Century Celebration',
+    imageUrl: 'https://images.unsplash.com/photo-1531415074968-036ba1b575da?q=80&w=2067&auto=format&fit=crop',
     isPremium: true,
     price: 7.99,
   },
   {
     id: 2,
-    title: 'Virat Kohli Celebrating',
-    imageUrl: 'public/lovable-uploads/81f1b811-7e63-4f8c-922d-c16b644f5fe1.png',
+    title: 'Rohit Sharma Cover Drive',
+    imageUrl: 'https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?q=80&w=2073&auto=format&fit=crop',
     isPremium: true,
     price: 6.99,
   },
   {
     id: 3,
-    title: 'Kohli and Dhoni Celebrating',
-    imageUrl: 'public/lovable-uploads/d5c74238-bc60-4790-bcb6-f2c8cb30ccc1.png',
+    title: 'Jasprit Bumrah Bowling Action',
+    imageUrl: 'https://images.unsplash.com/photo-1562077772-3bd8c3dfa4ac?q=80&w=1864&auto=format&fit=crop',
     isPremium: false,
     price: 0,
   },
   {
     id: 4,
-    title: 'Rohit Sharma Victory Pose',
-    imageUrl: 'public/lovable-uploads/889be52b-11a0-4158-a267-1a6e12e25219.png',
+    title: 'MS Dhoni Helicopter Shot',
+    imageUrl: 'https://images.unsplash.com/photo-1552053831-71594a27632d?q=80&w=1924&auto=format&fit=crop',
     isPremium: true,
     price: 8.99,
   },
   {
     id: 5,
-    title: 'ICC Trophy Celebration',
-    imageUrl: 'public/lovable-uploads/f4c3f58a-682b-4499-ae30-77d869a5bbc7.png',
+    title: 'Indian Team Victory Celebration',
+    imageUrl: 'https://images.unsplash.com/photo-1580397581145-cdb6a35b7d3f?q=80&w=2070&auto=format&fit=crop',
     isPremium: true,
     price: 9.99,
   },
   {
     id: 6,
-    title: 'Team India Champions',
-    imageUrl: 'public/lovable-uploads/80415f68-51b6-420c-aa4d-c05cf5bee1da.png',
+    title: 'Ravindra Jadeja Fielding',
+    imageUrl: 'https://images.unsplash.com/photo-1590156329625-4d017fa96bc6?q=80&w=1949&auto=format&fit=crop',
     isPremium: false,
     price: 0,
   }

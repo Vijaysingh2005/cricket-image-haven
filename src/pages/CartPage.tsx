@@ -24,24 +24,24 @@ const CartPage = () => {
   const [cartItems, setCartItems] = useState<CartItem[]>([
     {
       id: '1',
-      name: 'Virat Kohli Century Celebration',
+      name: 'Cricket Action Shot',
       price: 19.99,
       quantity: 2,
-      image: 'public/lovable-uploads/81f1b811-7e63-4f8c-922d-c16b644f5fe1.png',
+      image: '/placeholder.svg',
     },
     {
       id: '2',
-      name: 'Team India Champions',
+      name: 'Stadium Aerial View',
       price: 29.99,
       quantity: 1,
-      image: 'public/lovable-uploads/80415f68-51b6-420c-aa4d-c05cf5bee1da.png',
+      image: '/placeholder.svg',
     },
     {
       id: '3',
-      name: 'Trophy Celebration',
+      name: 'Team Celebration',
       price: 24.99,
       quantity: 1,
-      image: 'public/lovable-uploads/f4c3f58a-682b-4499-ae30-77d869a5bbc7.png',
+      image: '/placeholder.svg',
     },
   ]);
 
