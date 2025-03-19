@@ -2,7 +2,7 @@
 
 ## Project Info
 
-**GitHub Repository**: [https://github.com/vijaysingh966/your-repo-name](https://github.com/vijaysingh966/cricket-image-haven)
+**GitHub Repository**: [https://github.com/vijaysingh966/cricket-image-haven](https://github.com/vijaysingh966/cricket-image-haven)
 
 ## How to Edit This Code
 
