@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { Lock, EyeOff, Download, Eye } from 'lucide-react';
@@ -34,7 +33,7 @@ const ImageCard = ({ image }: ImageCardProps) => {
     navigate('/cart');
   };
 
-  const handleDownload = (e: React.MouseEvent) => {
+  const handleDownload = async (e: React.MouseEvent) => {
     e.stopPropagation();
     
     if (image.isPremium) {
@@ -47,27 +46,49 @@ const ImageCard = ({ image }: ImageCardProps) => {
     
     // For free images, trigger the download
     try {
-      // Create an anchor element and set its href to the image URL
-      const link = document.createElement('a');
-      link.href = image.imageUrl;
+      // For better mobile compatibility, fetch the image first
+      const response = await fetch(image.imageUrl);
+      const blob = await response.blob();
+      const blobUrl = window.URL.createObjectURL(blob);
       
-      // Extract filename from the URL
-      const filename = image.imageUrl.split('/').pop() || `cricket-image-${image.id}.jpg`;
+      // Extract filename from the URL or use the title
+      const filename = image.imageUrl.split('/').pop() || `${image.title.replace(/\s+/g, '-').toLowerCase()}.jpg`;
       
-      // Set the anchor's download attribute to the filename
-      link.setAttribute('download', filename);
+      // Check if this is a mobile device (iOS/Android)
+      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
       
-      // Simulate a click on the anchor element to start the download
-      document.body.appendChild(link);
-      link.click();
-      
-      // Clean up
-      document.body.removeChild(link);
+      if (isMobile) {
+        // Create a temporary anchor with download attribute
+        const link = document.createElement('a');
+        link.href = blobUrl;
+        link.download = filename;
+        link.style.display = 'none';
+        document.body.appendChild(link);
+        
+        // Trigger click event to start download
+        link.click();
+        
+        // Clean up
+        setTimeout(() => {
+          document.body.removeChild(link);
+          window.URL.revokeObjectURL(blobUrl);
+        }, 100);
+      } else {
+        // Desktop browsers - standard download approach
+        const link = document.createElement('a');
+        link.href = blobUrl;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(blobUrl);
+      }
       
       toast.success("Download started", {
         description: `Downloading ${image.title}`
       });
     } catch (error) {
+      console.error("Download error:", error);
       toast.error("Download failed", {
         description: "There was an error downloading this image. Please try again."
       });
