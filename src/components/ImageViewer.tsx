@@ -1,7 +1,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, EyeOff } from 'lucide-react';
+import { X, EyeOff, Download } from 'lucide-react';
+import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 
 interface ImageViewerProps {
@@ -33,6 +34,35 @@ const ImageViewer = ({ imageUrl, title, isOpen, onClose }: ImageViewerProps) => 
     };
   }, [isOpen, onClose]);
 
+  const handleDownload = () => {
+    try {
+      // Create an anchor element and set its href to the image URL
+      const link = document.createElement('a');
+      link.href = imageUrl;
+      
+      // Extract filename from the URL
+      const filename = imageUrl.split('/').pop() || `cricket-image.jpg`;
+      
+      // Set the anchor's download attribute to the filename
+      link.setAttribute('download', filename);
+      
+      // Simulate a click on the anchor element to start the download
+      document.body.appendChild(link);
+      link.click();
+      
+      // Clean up
+      document.body.removeChild(link);
+      
+      toast.success("Download started", {
+        description: `Downloading ${title}`
+      });
+    } catch (error) {
+      toast.error("Download failed", {
+        description: "There was an error downloading this image. Please try again."
+      });
+    }
+  };
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -61,17 +91,31 @@ const ImageViewer = ({ imageUrl, title, isOpen, onClose }: ImageViewerProps) => 
               style={{ pointerEvents: "none" }}
             />
             
-            <motion.button
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0 }}
-              transition={{ delay: 0.2 }}
-              className="absolute top-4 right-4 w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm text-white flex items-center justify-center hover:bg-black/70 transition-colors"
-              onClick={onClose}
-              aria-label="Close image viewer"
-            >
-              <X size={24} />
-            </motion.button>
+            <div className="absolute top-4 right-4 flex items-center gap-2">
+              <motion.button
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                transition={{ delay: 0.3 }}
+                className="w-10 h-10 rounded-full bg-green-500 text-white flex items-center justify-center hover:bg-green-600 transition-colors"
+                onClick={handleDownload}
+                aria-label="Download image"
+              >
+                <Download size={20} />
+              </motion.button>
+            
+              <motion.button
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                transition={{ delay: 0.2 }}
+                className="w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm text-white flex items-center justify-center hover:bg-black/70 transition-colors"
+                onClick={onClose}
+                aria-label="Close image viewer"
+              >
+                <X size={24} />
+              </motion.button>
+            </div>
 
             <div className="absolute top-4 left-4 bg-black/60 px-3 py-1.5 rounded-full flex items-center">
               <EyeOff size={16} className="mr-2" />
@@ -83,9 +127,16 @@ const ImageViewer = ({ imageUrl, title, isOpen, onClose }: ImageViewerProps) => 
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
               transition={{ delay: 0.3 }}
-              className="absolute bottom-0 left-0 right-0 bg-black/60 backdrop-blur-sm px-4 py-3 text-white"
+              className="absolute bottom-0 left-0 right-0 bg-black/60 backdrop-blur-sm px-4 py-3 text-white flex justify-between items-center"
             >
               <h3 className="text-lg font-medium text-left">{title}</h3>
+              <button 
+                className="flex items-center gap-1 bg-green-500 hover:bg-green-600 transition-colors px-3 py-1 rounded-lg text-sm font-medium"
+                onClick={handleDownload}
+              >
+                <Download size={14} />
+                Download
+              </button>
             </motion.div>
           </motion.div>
         </motion.div>

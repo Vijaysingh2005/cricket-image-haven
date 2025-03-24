@@ -37,10 +37,41 @@ const ImageCard = ({ image }: ImageCardProps) => {
   const handleDownload = (e: React.MouseEvent) => {
     e.stopPropagation();
     
-    // Block downloads for all images and show a notification
-    toast.error("Downloads are disabled for security reasons", {
-      description: "Please subscribe to a package to use our premium content."
-    });
+    if (image.isPremium) {
+      // Block downloads for premium images and show a notification
+      toast.error("This is premium content", {
+        description: "Please subscribe to a package to download premium content."
+      });
+      return;
+    }
+    
+    // For free images, trigger the download
+    try {
+      // Create an anchor element and set its href to the image URL
+      const link = document.createElement('a');
+      link.href = image.imageUrl;
+      
+      // Extract filename from the URL
+      const filename = image.imageUrl.split('/').pop() || `cricket-image-${image.id}.jpg`;
+      
+      // Set the anchor's download attribute to the filename
+      link.setAttribute('download', filename);
+      
+      // Simulate a click on the anchor element to start the download
+      document.body.appendChild(link);
+      link.click();
+      
+      // Clean up
+      document.body.removeChild(link);
+      
+      toast.success("Download started", {
+        description: `Downloading ${image.title}`
+      });
+    } catch (error) {
+      toast.error("Download failed", {
+        description: "There was an error downloading this image. Please try again."
+      });
+    }
   };
 
   const handlePreview = (e: React.MouseEvent) => {
@@ -109,6 +140,19 @@ const ImageCard = ({ image }: ImageCardProps) => {
               PREMIUM
             </div>
           )}
+
+          {/* Download button for free images */}
+          {!image.isPremium && (
+            <div 
+              className={cn(
+                "absolute bottom-2 right-2 bg-green-500 text-white rounded-full p-2 shadow-lg z-20 transition-all",
+                isHovered ? "opacity-100 scale-100" : "opacity-0 scale-90"
+              )}
+              onClick={handleDownload}
+            >
+              <Download className="w-5 h-5" />
+            </div>
+          )}
         </div>
 
         <div className="p-4">
@@ -118,7 +162,15 @@ const ImageCard = ({ image }: ImageCardProps) => {
             {image.isPremium ? (
               <span className="text-cricket-red font-semibold">₹{(image.price * 83.5).toFixed(2)}</span>
             ) : (
-              <span className="text-green-600 dark:text-green-400 font-semibold">Free</span>
+              <div className="flex items-center gap-2">
+                <span className="text-green-600 dark:text-green-400 font-semibold">Free</span>
+                <button 
+                  className="text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 transition-colors"
+                  onClick={handleDownload}
+                >
+                  <Download size={16} />
+                </button>
+              </div>
             )}
             
             <button 
