@@ -9,7 +9,8 @@ import {
   Mail,
   Phone,
   MapPin,
-  Github
+  Github,
+  Briefcase
 } from 'lucide-react';
 
 const Footer = () => {
@@ -38,6 +39,9 @@ const Footer = () => {
               </a>
               <a href="https://github.com/Vijaysingh966" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-cricket-red transition-colors">
                 <Github size={20} />
+              </a>
+              <a href="https://vijaysingh-portfolio.netlify.app/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-cricket-red transition-colors">
+                <Briefcase size={20} />
               </a>
             </div>
           </div>
