@@ -146,7 +146,7 @@ const PurchasedImages = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredImages.map(image => (
             <div 
-              key={image.id} 
+              key={`grid-${image.id}`} 
               className="bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow group"
             >
               <div className="relative h-48 bg-gray-200 dark:bg-gray-700">
@@ -210,7 +210,7 @@ const PurchasedImages = () => {
             </TableHeader>
             <TableBody>
               {purchasedImages.map(image => (
-                <TableRow key={image.id}>
+                <TableRow key={`table-${image.id}`}>
                   <TableCell>{image.title}</TableCell>
                   <TableCell>{new Date(image.date).toLocaleDateString()}</TableCell>
                   <TableCell>₹{(image.price * 83.5).toFixed(2)}</TableCell>
@@ -252,7 +252,7 @@ const PurchasedImages = () => {
       )}
 
       {/* Delete Confirmation Dialog */}
-      <AlertDialog open={imageToDelete !== null} onOpenChange={() => setImageToDelete(null)}>
+      <AlertDialog open={imageToDelete !== null} onOpenChange={(open) => !open && setImageToDelete(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Are you sure?</AlertDialogTitle>
