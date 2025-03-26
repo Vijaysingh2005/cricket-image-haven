@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -7,6 +8,7 @@ import { Loader2 } from '@/components/ui/custom-icons';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from 'sonner';
 import confetti from 'canvas-confetti';
+import jsPDF from 'jspdf';
 
 interface PaymentSuccessProps {
   transactionId: string;
@@ -60,10 +62,119 @@ const PaymentSuccess = ({ transactionId, navigate }: PaymentSuccessProps) => {
   const handleDownloadReceipt = () => {
     setIsDownloading(true);
     
+    // Create PDF document
     setTimeout(() => {
-      setIsDownloading(false);
-      toast.success("Receipt downloaded successfully");
-    }, 1500);
+      try {
+        const doc = new jsPDF();
+        const date = new Date().toLocaleDateString();
+        const time = new Date().toLocaleTimeString();
+        
+        // Add logo/header
+        doc.setFontSize(22);
+        doc.setTextColor(39, 174, 96);
+        doc.text("ImageStock", 105, 20, { align: "center" });
+        
+        // Add receipt title
+        doc.setFontSize(18);
+        doc.setTextColor(0, 0, 0);
+        doc.text("Payment Receipt", 105, 35, { align: "center" });
+        
+        // Add horizontal line
+        doc.setDrawColor(200, 200, 200);
+        doc.line(20, 40, 190, 40);
+        
+        // Add transaction details
+        doc.setFontSize(12);
+        doc.setTextColor(80, 80, 80);
+        
+        // Left side information
+        doc.text("Receipt Information:", 20, 55);
+        doc.text(`Date: ${date}`, 20, 65);
+        doc.text(`Time: ${time}`, 20, 75);
+        doc.text(`Transaction ID: ${transactionId}`, 20, 85);
+        doc.text("Payment Method: Card Payment", 20, 95);
+        
+        // Add horizontal line
+        doc.setDrawColor(200, 200, 200);
+        doc.line(20, 105, 190, 105);
+        
+        // Add payment information
+        doc.setFontSize(14);
+        doc.setTextColor(0, 0, 0);
+        doc.text("Payment Details", 20, 120);
+        
+        // Get purchased items from localStorage
+        const purchasedItems = JSON.parse(localStorage.getItem('purchasedImages') || '[]');
+        const recentItems = purchasedItems.slice(-3); // Get last 3 purchased items
+        
+        let yPosition = 130;
+        let total = 0;
+        
+        if (recentItems.length > 0) {
+          // Add table headers
+          doc.setFontSize(10);
+          doc.setTextColor(100, 100, 100);
+          doc.text("Item", 20, yPosition);
+          doc.text("Price (₹)", 150, yPosition);
+          yPosition += 5;
+          
+          // Add horizontal line
+          doc.setDrawColor(220, 220, 220);
+          doc.line(20, yPosition, 190, yPosition);
+          yPosition += 10;
+          
+          // Add items
+          doc.setTextColor(0, 0, 0);
+          recentItems.forEach((item: any) => {
+            const price = (item.price * 83.5);
+            total += price;
+            
+            // Truncate title if too long
+            let title = item.title;
+            if (title.length > 35) {
+              title = title.substring(0, 32) + "...";
+            }
+            
+            doc.text(title, 20, yPosition);
+            doc.text(price.toFixed(2), 150, yPosition);
+            yPosition += 10;
+          });
+        } else {
+          doc.text("No items found", 20, yPosition);
+          yPosition += 10;
+        }
+        
+        // Add horizontal line
+        doc.setDrawColor(200, 200, 200);
+        doc.line(20, yPosition, 190, yPosition);
+        yPosition += 10;
+        
+        // Add total
+        doc.setFontSize(12);
+        doc.setTextColor(0, 0, 0);
+        doc.text("Total Amount:", 110, yPosition);
+        doc.setFontSize(12);
+        doc.setTextColor(39, 174, 96);
+        doc.text(`₹${total.toFixed(2)}`, 150, yPosition);
+        
+        // Add footer
+        yPosition = 250;
+        doc.setFontSize(10);
+        doc.setTextColor(100, 100, 100);
+        doc.text("Thank you for your purchase!", 105, yPosition, { align: "center" });
+        doc.text("For any queries, please contact support@imagestock.com", 105, yPosition + 10, { align: "center" });
+        
+        // Save the PDF
+        doc.save(`Receipt_${transactionId}.pdf`);
+        
+        setIsDownloading(false);
+        toast.success("Receipt downloaded successfully");
+      } catch (error) {
+        console.error("Error generating PDF:", error);
+        setIsDownloading(false);
+        toast.error("Failed to download receipt");
+      }
+    }, 1000);
   };
   
   const handleDownloadImages = () => {
@@ -161,12 +272,12 @@ const PaymentSuccess = ({ transactionId, navigate }: PaymentSuccessProps) => {
                   {isDownloading ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Generating...
+                      Generating PDF...
                     </>
                   ) : (
                     <>
                       <FileText className="mr-2 h-4 w-4" />
-                      Download Receipt
+                      Download PDF Receipt
                     </>
                   )}
                 </Button>
