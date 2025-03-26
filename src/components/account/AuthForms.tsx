@@ -119,7 +119,7 @@ const AuthForms: React.FC<AuthFormsProps> = ({ onLoginSuccess }) => {
     }
     
     // In a real app, this would make an API call to create a user
-    console.log('Registration with:', registerData);
+    // Removed console.log of registration data for security
     
     // Mock adding user to database
     const newUser = {
