@@ -2,10 +2,21 @@
 import React, { useState, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Search, Download, Eye } from 'lucide-react';
+import { Search, Download, Eye, Trash2 } from 'lucide-react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import ImageViewer from '@/components/ImageViewer';
 import { toast } from 'sonner';
+import { 
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 // Define the type for purchased images
 interface PurchasedImage {
@@ -20,6 +31,7 @@ const PurchasedImages = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [viewImage, setViewImage] = useState<{url: string, title: string} | null>(null);
   const [purchasedImages, setPurchasedImages] = useState<PurchasedImage[]>([]);
+  const [imageToDelete, setImageToDelete] = useState<number | null>(null);
   
   // Load purchased images from localStorage on component mount
   useEffect(() => {
@@ -92,6 +104,28 @@ const PurchasedImages = () => {
     });
   };
 
+  // Function to delete image
+  const handleDeleteImage = (id: number) => {
+    setImageToDelete(id);
+  };
+
+  // Function to confirm deletion
+  const confirmDeleteImage = () => {
+    if (imageToDelete === null) return;
+    
+    const updatedImages = purchasedImages.filter(image => image.id !== imageToDelete);
+    setPurchasedImages(updatedImages);
+    
+    // Update localStorage
+    localStorage.setItem('purchasedImages', JSON.stringify(updatedImages));
+    
+    toast.success("Image deleted", {
+      description: "The image has been removed from your purchases."
+    });
+    
+    setImageToDelete(null);
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -136,6 +170,13 @@ const PurchasedImages = () => {
                   >
                     <Download size={18} />
                   </Button>
+                  <Button 
+                    size="icon" 
+                    variant="destructive"
+                    onClick={() => handleDeleteImage(image.id)}
+                  >
+                    <Trash2 size={18} />
+                  </Button>
                 </div>
               </div>
               <div className="p-4">
@@ -174,14 +215,25 @@ const PurchasedImages = () => {
                   <TableCell>{new Date(image.date).toLocaleDateString()}</TableCell>
                   <TableCell>₹{(image.price * 83.5).toFixed(2)}</TableCell>
                   <TableCell className="text-right">
-                    <Button 
-                      size="sm" 
-                      variant="ghost"
-                      onClick={() => handleDownload(image.url, image.title)}
-                    >
-                      <Download size={16} className="mr-2" />
-                      Download
-                    </Button>
+                    <div className="flex items-center justify-end gap-2">
+                      <Button 
+                        size="sm" 
+                        variant="ghost"
+                        onClick={() => handleDownload(image.url, image.title)}
+                      >
+                        <Download size={16} className="mr-2" />
+                        Download
+                      </Button>
+                      <Button 
+                        size="sm" 
+                        variant="ghost"
+                        className="text-destructive hover:text-destructive"
+                        onClick={() => handleDeleteImage(image.id)}
+                      >
+                        <Trash2 size={16} className="mr-2" />
+                        Delete
+                      </Button>
+                    </div>
                   </TableCell>
                 </TableRow>
               ))}
@@ -198,6 +250,28 @@ const PurchasedImages = () => {
           onClose={() => setViewImage(null)} 
         />
       )}
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={imageToDelete !== null} onOpenChange={() => setImageToDelete(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will permanently delete this image from your purchases. 
+              This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction 
+              onClick={confirmDeleteImage}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
